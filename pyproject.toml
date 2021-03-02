@@ -1,0 +1,65 @@
+[tool]
+[tool.poetry]
+name = "mirror_up"
+version = "0.1.0"
+homepage = "https://github.com/mycsina/mirror_up"
+description = "Top-level package for mirror-up."
+authors = ["Mycsina <mycsina@protonmail.com>"]
+readme = "README.rst"
+license =  "GPL-3.0-only"
+classifiers=[
+    'Development Status :: 2 - Pre-Alpha',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+    'Natural Language :: English',
+    'Programming Language :: Python :: 3.9',
+]
+packages = [
+    { include = "mirror_up" },
+    { include = "tests", format = "sdist" },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+httpx = "*"
+trio = "^0.18.0"
+python-dotenv = "^0.17.0"
+format-byte = "^1.1.1"
+alive-progress = "^1.6.2"
+py7zr = "^0.15.0"
+multivolumefile = "^0.2.2"
+hypothesis = "^6.8.9"
+typer = "^0.3.2"
+
+[tool.poetry.dev-dependencies]
+black = "*"
+bumpversion = "*"
+flake8 = "*"
+isort = "*"
+pytest = "*"
+sphinx = "*"
+sphinxcontrib_trio = "*"
+flake8-isort = "^4.0.0"
+flake8-bugbear = "^20.11.1"
+flake8-comprehensions = "^3.3.1"
+flake8-functions = "^0.0.5"
+flake8-annotations = "*"
+flake8-return = "^1.1.2"
+flake8-strings = "^0.1.1"
+dlint = "^0.11.0"
+flake8-blind-except = "^0.2.0"
+flake8-builtins = "^1.5.3"
+flake8-logging-format = "^0.6.0"
+flake8-docstrings = "^1.5.0"
+flake8-rst-docstrings = "^0.0.14"
+restructuredtext-lint = "^1.3.2"
+pep8-naming = "^0.11.1"
+flake8-simplify = "^0.14.0"
+flake8-variables-names = "^0.0.4"
+
+[tool.poetry.scripts]
+mirror_up = 'mirror_up.main:app'
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
