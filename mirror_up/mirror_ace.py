@@ -10,16 +10,11 @@ from typing import Dict, List, Optional, Union
 import httpx
 import trio
 import typer
+from _utils import archive_directory, read_in_chunks, split_directory
 from alive_progress import alive_bar
 from dotenv import load_dotenv
 from format_byte import format_byte
 from httpx._utils import peek_filelike_length
-
-if __name__ == "__main__":
-    from _utils import (archive_directory, read_in_chunks,  # type: ignore
-                        split_directory)
-else:
-    from ._utils import archive_directory, read_in_chunks, split_directory
 
 time_format = r"%d-%m-%Y %H:%M:%S"
 # Enable if you want to try to automatize this and wish to save logs
@@ -239,5 +234,6 @@ def info(slugs: List[str]) -> None:
     obj = MirrorAceConnection(getenv("API_KEY"), getenv("API_TOKEN"))
     req = trio.run(obj.get_file_info, slugs)
     typer.echo(req)
+
 
 # TODO Documentation

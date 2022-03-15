@@ -1,11 +1,13 @@
 """Console script for mirror_up."""
+import mirror_ace
 import typer
 
-import mirror_up.mirror_ace as mirror_ace  # type: ignore
+if __name__ == "__main__":
+    from mirror_ace import app
+else:
+    from .mirror_ace import app
 
-from .main import app
-
-app(prog_name="rick-portal-gun")
+app(prog_name="mirror_ace")
 app = typer.Typer()
 app.add_typer(mirror_ace.app, name="mirror_ace")
 

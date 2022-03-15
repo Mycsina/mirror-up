@@ -12,7 +12,9 @@ load_dotenv()
 
 def split_directory(directory: PathLike, volume_size: int) -> None:
     if Path(f"{getenv('ZIP_SAVE') + Path(directory).stem}/").is_dir():
-        with multivolumefile.open(f"{getenv('ZIP_SAVE') + Path(directory).stem}/{Path(directory).stem}", mode='wb', volume=volume_size) as target_archive: # noqa
+        with multivolumefile.open(
+            f"{getenv('ZIP_SAVE') + Path(directory).stem}/{Path(directory).stem}", mode="wb", volume=volume_size
+        ) as target_archive:  # noqa
             with open(f"{Path(directory)}", "rb") as f:
                 for entry in read_in_chunks(10000000, f):
                     target_archive.write(entry)
@@ -22,7 +24,7 @@ def split_directory(directory: PathLike, volume_size: int) -> None:
 
 
 def archive_directory(directory: PathLike) -> None:
-    shutil.make_archive(f"{getenv('ZIP_SAVE') + Path(directory).name}", 'tar', directory)
+    shutil.make_archive(f"{getenv('ZIP_SAVE') + Path(directory).name}", "tar", directory)
 
 
 def read_in_chunks(chunk_size: int, file_object: BinaryIO) -> BytesIO:
@@ -31,5 +33,6 @@ def read_in_chunks(chunk_size: int, file_object: BinaryIO) -> BytesIO:
         if not data:
             break
         yield data
+
 
 # TODO Documentation
