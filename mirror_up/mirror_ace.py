@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # coding=utf-8
 """Main module."""
 import logging
@@ -10,11 +11,13 @@ from typing import Dict, List, Optional, Union
 import httpx
 import trio
 import typer
-from _utils import archive_directory, read_in_chunks, split_directory
+from mirror_up._utils import archive_directory, read_in_chunks, split_directory
 from alive_progress import alive_bar
 from dotenv import load_dotenv
 from format_byte import format_byte
 from httpx._utils import peek_filelike_length
+from notifypy import Notify
+import pyperclip
 
 time_format = r"%d-%m-%Y %H:%M:%S"
 # Enable if you want to try to automatize this and wish to save logs
@@ -173,9 +176,11 @@ class MirrorAceConnection:
 
 @app.command(help="Upload files/folders to MirrorAce.")
 def upload(
-    path: List[Path] = typer.Argument(..., help="Path to files/folders"),
-    password: Optional[str] = typer.Option(None, help="Provide a password for the download"),
+    path: List[Path] = typer.Argument(..., help="Path to files/folders."),
+    password: Optional[str] = typer.Option(None, help="Provide a password for the download."),
+    clipboard: Optional[bool] = typer.Option(True, help="Specify if you want to save the result to a clipboard."),
 ) -> None:
+    notification = Notify()
     for filepath in path:
         if filepath.exists():
             obj = MirrorAceConnection(getenv("API_KEY"), getenv("API_TOKEN"))
@@ -185,9 +190,15 @@ def upload(
                 req = trio.run(obj, filepath)
             if isinstance(req, httpx.Response):
                 typer.echo(req.json()["result"]["url"])
+                notification.title = f'{req.json()["result"]["name"]} has been uploaded.'
+                notification.message = f"The link has been copied to your clipboard"
+                notification.send()
+                pyperclip.copy(req.json()["result"]["url"])
             if isinstance(req, list):
-                for line in req:
-                    typer.echo(line)
+                with open("../results.txt", "w+") as f:
+                    for line in req:
+                        typer.echo(line)
+                        f.write(f"{line}\n")
         else:
             typer.echo(f"This path does not exist: {filepath}")
 
