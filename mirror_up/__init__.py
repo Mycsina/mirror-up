@@ -2,5 +2,5 @@
 
 __author__ = """Mycsina"""
 __email__ = "mycsina@protonmail.com"
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 APP_NAME = "mirror-up"
