@@ -1,18 +1,18 @@
 [tool]
 [tool.poetry]
 name = "mirror_up"
-version = "0.1.0"
+version = "0.1.1"
 homepage = "https://github.com/mycsina/mirror_up"
 description = "Top-level package for mirror-up."
 authors = ["Mycsina <mycsina@protonmail.com>"]
 readme = "README.rst"
-license =  "GPL-3.0-only"
+license =  "MIT"
 classifiers=[
-    'Development Status :: 2 - Pre-Alpha',
-    'Intended Audience :: Developers',
-    'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: End Users/Desktop',
+    'License :: OSI Approved :: MIT License',
     'Natural Language :: English',
-    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
 ]
 packages = [
     { include = "mirror_up" },

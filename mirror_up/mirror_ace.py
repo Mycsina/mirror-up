@@ -22,7 +22,6 @@ from httpx._utils import peek_filelike_length
 from mirror_up._utils import archive_directory, read_in_chunks, split_directory
 
 time_format = r"%d-%m-%Y %H:%M:%S"
-# Enable if you want to try to automatize this and wish to save logs
 logging.basicConfig(
     # filename=f"/logs/main-{datetime.now().strftime(time_format)}",
     format="%(message)s",
@@ -103,7 +102,7 @@ class MirrorAceConnection:
                 logging.info(f"[I] {file_name} has been uploaded")
                 logging.info(f"[I] File has been uploaded to: {req.json()['result']['url']}")
             else:
-                print("Error: ", req.json())
+                logging.error("Error: ", req.json())
             return req
 
         if path.isfile(file_path):
@@ -133,7 +132,7 @@ class MirrorAceConnection:
                         logging.info(f"[I] {file_name} has been uploaded")
                         logging.info(f"[I] File has been uploaded to: {req.json()['result']['url']}")
                     else:
-                        print("Error: ", req)
+                        logging.error("Error: ", req)
                     await self.Client.aclose()
                     return req
                 else:
@@ -197,7 +196,7 @@ class MirrorAceConnection:
     #         logging.info(f"[I] {url} has been uploaded")
     #         logging.info(f"[I] File has been uploaded to: {req.json()['result']['url']}")
     #     else:
-    #         print("Error: ", req)
+    #         logging.error("Error: ", req)
     #     await self.Client.aclose()
     #     return req
 

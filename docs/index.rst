@@ -11,7 +11,6 @@ Welcome to mirror-up's documentation!
    modules
    contributing
    authors
-   history
 
 Indices and tables
 ==================

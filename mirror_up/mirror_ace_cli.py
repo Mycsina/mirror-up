@@ -84,7 +84,7 @@ def folder(
 #         else:
 #             req = trio.run(obj.upload_remote, link)
 #         if isinstance(req, httpx.Response):
-#             print(req.json())
+#             logging.error(req.json())
 #             typer.echo(req.json()["result"]["url"])
 
 

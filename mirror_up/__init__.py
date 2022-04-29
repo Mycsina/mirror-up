@@ -1,4 +1,5 @@
 """Top-level package for mirror-up."""
+from mirror_ace import MirrorAceConnection  # noqa
 
 __author__ = """Mycsina"""
 __email__ = "mycsina@protonmail.com"
