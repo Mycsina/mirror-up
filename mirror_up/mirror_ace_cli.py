@@ -1,5 +1,6 @@
 """CLI configuration"""
 
+import logging
 from concurrent.futures import ThreadPoolExecutor
 from os import PathLike, getenv
 from pathlib import Path
@@ -18,6 +19,8 @@ load_dotenv()
 
 app = typer.Typer(help="Use MirrorAce commands")
 
+logging.basicConfig(format="%(message)s", level=logging.INFO)
+
 
 @app.command(help="Upload files/folders to MirrorAce.")
 def upload(
@@ -25,7 +28,10 @@ def upload(
     notify: Optional[bool] = typer.Option(False, help="Specify if you want to be notified when it concludes."),
     password: Optional[str] = typer.Option(None, help="Provide a password for the download."),
     clipboard: Optional[bool] = typer.Option(True, help="Specify if you want to save the result to the clipboard."),
+    verbose: Optional[int] = typer.Option(0, "--verbose", "-v", count=True),
 ) -> None:
+    if verbose == 1:
+        logging.basicConfig(format="%(message)s", level=logging.DEBUG, force=True)
     with ThreadPoolExecutor() as executor:
         for filepath in path:
             if filepath.exists():
@@ -35,7 +41,7 @@ def upload(
 
 
 def upload_logic(filepath: PathLike, notify: bool, password: str, clipboard: bool):
-    obj = MirrorAceConnection(getenv("API_KEY"), getenv("API_TOKEN"))
+    obj = MirrorAceConnection(getenv("MirAce_K"), getenv("MirAce_T"))
     if password is not None:
         req = trio.run(obj, filepath, password)
     else:
@@ -61,7 +67,10 @@ def upload_logic(filepath: PathLike, notify: bool, password: str, clipboard: boo
 def folder(
     path: List[Path] = typer.Argument(..., help="Path to folder containing files"),
     password: Optional[str] = typer.Option(None, help="Provide a password for the download"),
+    verbose: Optional[int] = typer.Option(0, "--verbose", "-v", count=True),
 ) -> None:  # noqa
+    if verbose == 1:
+        logging.basicConfig(format="%(message)s", level=logging.DEBUG, force=True)
     with ThreadPoolExecutor() as executor:
         for filepath in path:
             if filepath.exists():
@@ -78,7 +87,7 @@ def folder(
 #     password: Optional[str] = typer.Option(None, help="Provide a password for the download"),
 # ) -> None:
 #     for link in url:
-#         obj = MirrorAceConnection(getenv("API_KEY"), getenv("API_TOKEN"))
+#         obj = MirrorAceConnection(getenv("MirAce_K"), getenv("MirAce_T"))
 #         if password is not None:
 #             req = trio.run(obj.upload_remote, link, password)
 #         else:
@@ -89,13 +98,18 @@ def folder(
 
 
 @app.command(help="Get info on files uploaded to MirrorAce")
-def info(slugs: List[str]) -> None:
+def info(
+    slugs: List[str],
+    verbose: Optional[int] = typer.Option(0, "--verbose", "-v", count=True),
+) -> None:
     """
     Get file information from MirrorAce slugs
 
     Args:
         slugs: List[str]
     """
-    obj = MirrorAceConnection(getenv("API_KEY"), getenv("API_TOKEN"))
+    if verbose == 1:
+        logging.basicConfig(format="%(message)s", level=logging.DEBUG, force=True)
+    obj = MirrorAceConnection(getenv("MirAce_K"), getenv("MirAce_T"))
     req = trio.run(obj.get_file_info, slugs)
     typer.echo(req)

@@ -21,14 +21,6 @@ from httpx._utils import peek_filelike_length
 
 from mirror_up._utils import archive_directory, read_in_chunks, split_directory
 
-time_format = r"%d-%m-%Y %H:%M:%S"
-logging.basicConfig(
-    # filename=f"/logs/main-{datetime.now().strftime(time_format)}",
-    format="%(message)s",
-    # datefmt=time_format,
-    level=logging.DEBUG,
-)
-
 load_dotenv()
 
 
@@ -114,12 +106,15 @@ class MirrorAceConnection:
                 logging.debug(f"[D] File size: {format_byte(content_size)}")
                 if content_size > int(self.params["max_file_size"]):
                     if not Path(getenv("ZIP_SAVE")).is_dir():
-                        logging.info(f"[I] Creating tar save folder")
+                        logging.info(f"[D] Creating tar save folder")
                         Path(getenv("ZIP_SAVE")).mkdir()
-                    logging.info(f"[I] Splitting {file_name} into multi-volume archive")
+                    logging.info(f"[D] Splitting {file_name} into multi-volume archive")
                     split_directory(Path(file_path), int(self.params["max_file_size"]))
                     with ThreadPoolExecutor() as executor:
-                        futures = [executor.submit(part_upload, path) for path in Path("tar/testP/").iterdir()]
+                        futures = [
+                            executor.submit(part_upload, path)
+                            for path in Path(f"{getenv('ZIP_SAVE') + Path(file_path).stem}/").iterdir()
+                        ]
                         result = [await future.result() for future in futures]
                     await self.Client.aclose()
                     return result
@@ -144,9 +139,9 @@ class MirrorAceConnection:
                     return req
         if path.isdir(file_path):
             if not Path(getenv("ZIP_SAVE")).is_dir():
-                logging.info(f"[I] Creating tar save folder")
+                logging.info(f"[D] Creating tar save folder")
                 Path(getenv("ZIP_SAVE")).mkdir()
-            logging.info(f"[I] Archiving {Path(file_path).name}")
+            logging.info(f"[D] Archiving {Path(file_path).name}")
             archive_directory(file_path)
             req = await self.__call__(f"{getenv('ZIP_SAVE') + Path(file_path).name}.tar")
             await self.Client.aclose()

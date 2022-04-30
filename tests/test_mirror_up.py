@@ -14,7 +14,7 @@ load_dotenv()
 
 
 def test_mirrorace_keys() -> None:  # noqa: D103
-    connection = MirrorAceConnection(getenv("API_KEY"), getenv("API_TOKEN"))
+    connection = MirrorAceConnection(getenv("MirAce_K"), getenv("MirAce_T"))
     assert isinstance(connection.params["server"], str)
     assert isinstance(connection.params["server_file"], str)
     assert isinstance(connection.params["server_remote"], str)
@@ -36,7 +36,7 @@ def test_mirrorace_keys() -> None:  # noqa: D103
 
 
 def test_mirrorace_file_info() -> None:  # noqa: D103
-    connection = MirrorAceConnection(getenv("API_KEY"), getenv("API_TOKEN"))
+    connection = MirrorAceConnection(getenv("MirAce_K"), getenv("MirAce_T"))
     # Create small file
     with open("test.tmp", "w") as f:
         f.truncate(10**5)
@@ -65,7 +65,7 @@ def test_mirrorace_file_info() -> None:  # noqa: D103
 
 def test_mirrorace_part_upload() -> None:  # noqa: D103
     file = "testP.tmp"
-    connection = MirrorAceConnection(getenv("API_KEY"), getenv("API_TOKEN"))
+    connection = MirrorAceConnection(getenv("MirAce_K"), getenv("MirAce_T"))
     # Create chonky file for testing
     with open(file, "w") as f:
         f.truncate(int(1.05 * int(connection.params["max_file_size"])))
@@ -76,7 +76,7 @@ def test_mirrorace_part_upload() -> None:  # noqa: D103
 
 def test_mirrorace_chunk_upload() -> None:  # noqa: D103
     file = "testC.tmp"
-    connection = MirrorAceConnection(getenv("API_KEY"), getenv("API_TOKEN"))
+    connection = MirrorAceConnection(getenv("MirAce_K"), getenv("MirAce_T"))
     # Create chonky file for testing
     with open(file, "w") as f:
         f.truncate(int(1.05 * int(connection.params["max_chunk_size"])))
@@ -87,7 +87,7 @@ def test_mirrorace_chunk_upload() -> None:  # noqa: D103
 
 def test_mirrorace_simple_upload() -> None:  # noqa: D103
     file = "testS.tmp"
-    connection = MirrorAceConnection(getenv("API_KEY"), getenv("API_TOKEN"))
+    connection = MirrorAceConnection(getenv("MirAce_K"), getenv("MirAce_T"))
     # Create small file for testing
     with open(file, "w") as f:
         f.truncate(10**5)

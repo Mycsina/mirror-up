@@ -1,9 +1,9 @@
 [tool]
 [tool.poetry]
 name = "mirror_up"
-version = "0.1.1"
+version = "0.1.4"
 homepage = "https://github.com/mycsina/mirror_up"
-description = "Top-level package for mirror-up."
+description = "Upload files to online mirroring services."
 authors = ["Mycsina <mycsina@protonmail.com>"]
 readme = "README.rst"
 license =  "MIT"

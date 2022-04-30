@@ -22,8 +22,8 @@ Create an account at MirrorAce and set your environment variables
 
 .. code-block:: console
 
-        API_KEY=     # MirrorAce
-        API_TOKEN=   # MirrorAce
+        MirAce_K=     # MirrorAce API key
+        MirAce_T=   # MirrorAce API Token
         ZIP_SAVE=    # Path where to store temp files
 
 Upload the file/folder at a given path to MirrorAce
