@@ -46,7 +46,7 @@ def test_mirrorace_file_info() -> None:  # noqa: D103
     # Get slug from update url
     slug = req.json()["result"]["slug"]
     # Renew connection
-    connection = connection.clone()
+    connection = connection.renew()
     req = trio.run(connection.get_file_info, [slug, "0101"])
     assert isinstance(req.json()["result"][slug]["id"], str)
     assert isinstance(req.json()["result"][slug]["name"], str)
@@ -60,7 +60,7 @@ def test_mirrorace_file_info() -> None:  # noqa: D103
     assert not isinstance(req.json()["result"]["0101"]["slug"], str)
     assert not isinstance(req.json()["result"]["0101"]["size"], str)
     assert not isinstance(req.json()["result"]["0101"]["url"], str)
-    assert not isinstance(req.json()["result"]["0101"]["status"], str)
+    assert req.json()["result"]["0101"]["status"] == "not found"
 
 
 def test_mirrorace_part_upload() -> None:  # noqa: D103
@@ -71,7 +71,8 @@ def test_mirrorace_part_upload() -> None:  # noqa: D103
         f.truncate(int(1.05 * int(connection.params["max_file_size"])))
     req = trio.run(connection, Path(file))
     remove(file)
-    assert connection._check_success(req)
+    for entry in req:
+        assert connection._check_success(entry)
 
 
 def test_mirrorace_chunk_upload() -> None:  # noqa: D103

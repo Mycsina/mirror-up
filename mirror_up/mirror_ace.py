@@ -5,7 +5,7 @@ import logging
 import math
 import mimetypes
 from concurrent.futures import ThreadPoolExecutor
-from os import PathLike, getenv, path
+from os import PathLike, getenv, path, remove
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -117,6 +117,7 @@ class MirrorAceConnection:
                         ]
                         result = [await future.result() for future in futures]
                     await self.Client.aclose()
+                    remove(Path(f'{getenv("ZIP_SAVE")}/{Path(file_path).stem}/'))
                     return result
                 if content_size < int(self.params["max_chunk_size"]):
                     payload = {"files": (file_name, file, mimetypes.guess_type(file_path)[0])}
@@ -131,7 +132,7 @@ class MirrorAceConnection:
                     await self.Client.aclose()
                     return req
                 else:
-                    req = await _upload_chunks(file)
+                    req = await _upload_chunks(file_path)
                     if self._check_success(req):
                         logging.info(f"[I] {file_name} has been uploaded")
                         logging.info(f"[I] File has been uploaded to: {req.json()['result']['url']}")
@@ -145,6 +146,7 @@ class MirrorAceConnection:
             archive_directory(file_path)
             req = await self.__call__(f"{getenv('ZIP_SAVE') + Path(file_path).name}.tar")
             await self.Client.aclose()
+            remove(Path(f'{getenv("ZIP_SAVE")}/{Path(file_path).name}.tar'))
             return req
 
     def _check_success(self, response: httpx.Response) -> bool:
@@ -195,6 +197,6 @@ class MirrorAceConnection:
     #     await self.Client.aclose()
     #     return req
 
-    def clone(self) -> "MirrorAceConnection":
+    def renew(self) -> "MirrorAceConnection":
         """Recreate the connection. Use when it has been closed (after any upload operation)"""
         return MirrorAceConnection(self.api_key, self.api_token)

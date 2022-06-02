@@ -47,7 +47,7 @@ pydocstyle = "^6.1.1"
 restructuredtext-lint = "^1.4.0"
 pep8-naming = "^0.12.1"
 flake8-simplify = "^0.18.1"
-hypothesis = "^6.39.3"
+pytest = "^7.1.2"
 
 [build-system]
 requires = ["poetry>=0.12"]
